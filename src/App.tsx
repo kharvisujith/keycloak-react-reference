@@ -1,212 +1,114 @@
-// import React, { useEffect, useState } from "react";
-// import logo from "./logo.svg";
-// import "./App.css";
-// import Nav from "./components/Nav";
-
-import { ReactKeycloakProvider } from "@react-keycloak/web";
-import Keycloak from "keycloak-js";
-import keycloak from "keycloak-js";
-import { useEffect } from "react";
-import { Routes, Route } from "react-router-dom";
-import RoutesPage from "./components/RoutesPage";
-import HomePage from "./Screen/Homepage";
-
-// import HomePage from "./Screen/Homepage";
-// import SecuredPage from "./Screen/SecuredPage";
-// // import keycloak from "./components/KeyCloak";
-// import { Routes, Route } from "react-router-dom";
-
-// import PrivateRoute from "./components/PrivateRoute";
-// import { ReactKeycloakProvider } from "@react-keycloak/web";
 // import Keycloak from "keycloak-js";
-// // import Keycloak from "keycloak-js";
-
-// // keycloak.init({
-// //   onLoad: "login-required",
-// // });
-// // keycloak.init({ onLoad: "check-sso" }).then((authenticated) => {
-// // //   console.log(`User ${authenticated ? "is" : "is not"} authenticated`);
-// // // });
-// // const keycloak = new Keycloak({
-// //   url: "http://localhost:8080/",
-// //   realm: "demo",
-// //   clientId: "rms-client",
-// // });
+// import { useEffect, useState } from "react";
+// import RoutesPage from "./components/RoutesPage";
+// import jwt_decode from "jwt-decode";
+// import jwtDecode from "jwt-decode";
+// import HomePage from "./Screen/Homepage";
+// import { Route, Routes } from "react-router-dom";
+// import SecuredPage from "./Screen/SecuredPage";
+// import { keycloakInstance, keycloakService } from "./security/keycloakService";
+// import PublicPage from "./Screen/PublicPage";
 
 // const App = () => {
-//   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+//   // const [authenticated, setAuthenticated] = useState<boolean>(false);
+
+//   const decodeToken = (token: any) => {
+//     const decoded = jwtDecode(token);
+//     console.log(decoded);
+//     return decoded;
+//   };
+
 //   useEffect(() => {
-//     console.log("useEffect of app is called");
-//     console.log(
-//       "keylcloak value is",
-//       keycloak,
-//       keycloak.authenticated,
-//       keycloak.token
-//     );
+//     const token = localStorage.getItem("token");
+//     if (token) {
+//       console.log("inside if token");
+//       console.log(keycloakService.userRoles());
 
-//     // console.log(typeof keycloak);
-//     // console.log(keycloak.token);
-//     // console.log(keycloak.authenticated);
-//     // if (keycloak.authenticated) {
-//     //   setIsAuthenticated(keycloak.authenticated);
-//     // }
+//       const decodedToken: any = decodeToken(token);
+
+//       if (decodedToken.exp > Date.now() / 1000) {
+//         //  setAuthenticated(true);
+//         keycloakInstance.token = token;
+//         keycloakInstance.refreshToken =
+//           localStorage.getItem("refreshToken") || "";
+//       } else {
+//         localStorage.removeItem("token");
+//         localStorage.removeItem("refreshToken");
+//         const kk = keycloakService.authenticate();
+//         console.log(kk);
+//       }
+//     } else {
+//       console.log("inside else in app useEffect");
+//       //authenticate();
+//       const kk = keycloakService.authenticate();
+//       console.log(kk);
+//     }
 //   }, []);
-//   console.log("auth value is", isAuthenticated);
 
-//   // useEffect(() => {
-//   //   keycloak.init({ onLoad: "login-required" }).then((authenticated) => {
-//   //     console.log("autheticate value in useeffect is", authenticated);
-//   //     setIsAuthenticated(authenticated);
-//   //   });
-//   // }, [keycloak, setIsAuthenticated]);
+//   // function authenticate() {
+//   //   keycloakService.authenticate();
+//   // }
 //   return (
 //     <>
-//       <ReactKeycloakProvider
-//         //  initOptions={{ onload: "login-required" }}
-//         authClient={keycloak}
-//       >
-//         <Nav />
-
-//         <Routes>
-//           <Route path="/" element={<HomePage />} />
-//           <Route path="/secured" element={<SecuredPage />} />
-//         </Routes>
-//         {/* {isAuthenticated && (
-//     <>
 //       <Routes>
-
+//         <Route path="/" element={<PublicPage />} />
+//         <Route path="/home" element={<HomePage />} />
+//         <Route path="/secured" element={<SecuredPage />} />
 //       </Routes>
-//     </>
-//   )}
-
-//   {!isAuthenticated && (
-//     <Routes>
-//       <Route path="/" element={<HomePage />} />
-//     </Routes>
-//   )} */}
-//       </ReactKeycloakProvider>
+//       {/* <HomePage /> */}
+//       {/* <RoutesPage /> */}
 //     </>
 //   );
 // };
-
 // export default App;
 
-// // import React, { useEffect, useState } from "react";
-// // import Keycloak from "keycloak-js";
-// // import { ReactKeycloakProvider } from "@react-keycloak/web";
-// // import { Routes, Route } from "react-router-dom";
-// // import Nav from "./components/Nav";
-// // import HomePage from "./Screen/Homepage";
-// // import SecuredPage from "./Screen/SecuredPage";
+import React, { useEffect, useState } from "react";
+import Keycloak from "keycloak-js";
+import { keycloakInstance, keycloakService } from "./security/keycloakService";
+import { Routes, Route } from "react-router-dom";
+import HomePage from "./Screen/Homepage";
+import SecuredPage from "./Screen/SecuredPage";
+import PublicPage from "./Screen/PublicPage";
 
-// // const MyComponent = () => {
-// //   const [keycloak, setKeycloak] = useState<any>();
-// //   useEffect(() => {
-// //     const initKeycloak = async () => {
-// //       const keycloak = new Keycloak({
-// //         url: "http://localhost:8080",
-// //         realm: "demo",
-// //         clientId: "rms-client",
-// //       });
-// //       await keycloak.init({
-// //         onLoad: "login-required",
-// //         checkLoginIframe: false,
-// //       });
-// //       setKeycloak(keycloak);
-// //     };
-// //     if (!keycloak) {
-// //       initKeycloak();
-// //     }
-// //     // initKeycloak();
-// //   }, [keycloak]);
-
-// //   // useEffect(() => {
-// //   //   const initKeycloak = async () => {
-// //   //     const keycloak = new Keycloak({
-// //   //       url: "http://localhost:8080",
-// //   //       realm: "demo",
-// //   //       clientId: "rms-client",
-// //   //     });
-// //   //     await keycloak.init({
-// //   //       onLoad: "login-required",
-// //   //       checkLoginIframe: false, // This is important for Keycloak version 20+
-// //   //       //  redirectUri: "http://localhost:3000/secured",
-// //   //     });
-// //   //     if (keycloak.authenticated) setKeycloak(keycloak);
-// //   //   };
-
-// //   //   initKeycloak();
-// //   // }, []);
-
-// //   // if (!keycloak) {
-// //   //   return <p>...lodingcomponent here</p>;
-// //   // }
-
-// //   return (
-// //     <>
-// //       <ReactKeycloakProvider authClient={keycloak}>
-// //         <React.StrictMode>
-// //           <Routes>
-// //             <Route path="/" element={<HomePage />} />
-// //             <Route path="/secured" element={<SecuredPage />} />
-// //           </Routes>
-// //         </React.StrictMode>
-// //       </ReactKeycloakProvider>
-
-// //       {/* <ReactKeycloakProvider authClient={keycloak}>
-// //         <Nav />
-
-// //         <Routes>
-// //           <Route path="/" element={<HomePage />} />
-// //           <Route path="/secured" element={<SecuredPage />} />
-// //         </Routes>
-// //       </ReactKeycloakProvider> */}
-// //     </>
-// //   );
-// // };
-
-// // export default MyComponent;
-const keycloakInstance = new Keycloak();
-
-const App = () => {
-  const handleTokens = (tokens: any) => {
-    console.log("token caleedd");
-    if (tokens.token && tokens.refreshToken) {
-      localStorage.setItem("access_token", tokens.token);
-      localStorage.setItem("refresh_token", tokens.refreshToken);
-      localStorage.setItem(
-        "roles",
-        JSON.stringify(keycloakInstance.realmAccess?.roles)
-      );
-    }
-    console.log(keycloakInstance.realmAccess?.roles);
-
-    // localStorage.setItem(
-    //   "roles",
-    //   JSON.stringify(keycloakInstance?.realmAccess.roles! || "")
-    // );
-  };
+function App() {
+  const [keycloakInitialized, setKeycloakInitialized] = useState(false);
+  //const [authenticated, setAuthenticated] = useState<any>();
 
   useEffect(() => {
-    console.log("useEffect in app");
-    console.log("keyckl is", keycloakInstance);
-  }, []);
+    if (!keycloakInitialized) {
+      const autheticate = async () => {
+        const isAuthenticated = await keycloakService.authenticate();
+        console.log("isauthe is", isAuthenticated);
+        if (isAuthenticated) {
+          // setAuthenticated(true);
+          setKeycloakInitialized(true);
+        }
+      };
+      autheticate();
+    }
+  }, [keycloakInitialized]);
+  console.log(
+    "value of keycloakinstance.authenticated is",
+    keycloakInstance.authenticated
+  );
+
+  console.log("keycloak is", keycloakInstance.realmAccess?.roles);
 
   return (
     <>
-      <ReactKeycloakProvider
-        authClient={keycloakInstance}
-        initOptions={{ onLoad: "check-sso", checkLoginIframe: true }}
-        onTokens={handleTokens}
-        //  isLoadingCheck={false}
-        // isLoadingCheck={false} // disable automatic token check
-      >
-        <RoutesPage />
-        {/* <Routes>
+      {keycloakInstance.authenticated &&
+      keycloakService.userRoles() === "interviewer" ? (
+        <Routes>
           <Route path="/" element={<HomePage />} />
-        </Routes> */}
-      </ReactKeycloakProvider>
+          <Route path="/secured" element={<SecuredPage />} />
+        </Routes>
+      ) : (
+        <Routes>
+          <Route path="/" element={<PublicPage />} />
+        </Routes>
+      )}
     </>
   );
-};
+}
+
 export default App;
