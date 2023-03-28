@@ -70,7 +70,7 @@ const login = () => {
 const logout = () => {
   //   localStorage.removeItem("token");
   //   localStorage.removeItem("refreshToken");
-  keycloakInstance.logout();
+  keycloakInstance.logout({ redirectUri: "http://localhost:3000/" });
 };
 
 const userRoles = () => {

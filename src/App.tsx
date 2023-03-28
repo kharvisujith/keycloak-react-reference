@@ -65,7 +65,7 @@
 import React, { useEffect, useState } from "react";
 import Keycloak from "keycloak-js";
 import { keycloakInstance, keycloakService } from "./security/keycloakService";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import HomePage from "./Screen/Homepage";
 import SecuredPage from "./Screen/SecuredPage";
 import PublicPage from "./Screen/PublicPage";
@@ -101,10 +101,13 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/secured" element={<SecuredPage />} />
+          <Route path="/login" element={<PublicPage />} />
         </Routes>
       ) : (
         <Routes>
           <Route path="/" element={<PublicPage />} />
+          {/* <Route path="/" element={<Navigate to="/login" />} /> */}
+          <Route path="/login" element={<PublicPage />} />
         </Routes>
       )}
     </>
