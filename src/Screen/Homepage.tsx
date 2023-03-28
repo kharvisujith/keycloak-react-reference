@@ -1,9 +1,11 @@
 import { useKeycloak } from "@react-keycloak/web";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { keycloakInstance, keycloakService } from "../security/keycloakService";
 
 const HomePage = () => {
   // const { keycloak, initialized } = useKeycloak();
+  const navigate = useNavigate();
 
   // const handleLogout = () => {
   //   localStorage.removeItem("access_token");
@@ -23,6 +25,13 @@ const HomePage = () => {
       {keycloakInstance.authenticated && (
         <button onClick={keycloakService.logout}>logout</button>
       )}
+      <button
+        onClick={() => {
+          navigate("/secured");
+        }}
+      >
+        securee
+      </button>
     </>
   );
 };
